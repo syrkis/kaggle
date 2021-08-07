@@ -1,3 +1,9 @@
 **/*.zip
+.idea/
 **/*.csv
 **/.DS_Store
+**/*.out
+**/*.tmp
+**/*.txt
+**/data
+**/__*
