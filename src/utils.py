@@ -8,7 +8,7 @@ import numpy as np
 
 
 # prediction function for fully connected linear layers
-def fc_predict(params, inputs):
+def predict(params, inputs):
     activations = inputs
     for w, b in params[:-1]:
         outputs = jnp.dot(activations, w) + b
@@ -21,9 +21,9 @@ def fc_predict(params, inputs):
 
 
 # cross entropy loss
-def ce_loss(params, batch):
+def loss(model, params, batch):
     inputs, targets = batch
-    preds = predict(params, inputs)
+    preds = model(params, inputs)
     return - jnp.mean(jnp.sum(preds * targets, axis=1))
 
 

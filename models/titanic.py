@@ -3,4 +3,5 @@
 # by: Noah Syrkis
 
 # imports
-
+def titanic():
+    pass
