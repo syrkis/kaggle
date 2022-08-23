@@ -3,8 +3,11 @@
 # by: Noah Syrkis
 
 # imports
+from comps import *
 import pandas as pd
 
+
+# data preproccsing
 def get_data(comp):
     if comp == 'tabular-playground-series-aug-2022':
         train_data = pd.get_dummies(pd.read_csv('data/train.csv', index_col='id'))
@@ -18,4 +21,12 @@ def get_data(comp):
 
     if comp == 'titanic':
         pass
+
+
+# return model function
+def get_model(comp):
+    if comp == 'tabular-playground-series-aug-2022':
+        return lambda params, inputs: tpsaug22(params, inputs)
+    if comp == 'titanic':
+        return lambda params, inputs: titanic(params, inputs)
 

@@ -12,6 +12,7 @@ def main():
     args = get_args()
     train_inputs, train_targets, test_inputs = get_data(args.comp)
     batches = data_stream(train_inputs, train_targets, batch_size=128)
+    model = get_model(args.comp)
     print(next(batches))
     """
     params = train(batches)
