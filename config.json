@@ -1,0 +1,9 @@
+{
+    "tabular-playground-series-aug-2022" : {
+        "layer_sizes" : [23, 10, 10, 2],
+        "batch_size" : 256,
+        "step_size" : 0.001,
+        "num_epochs" : 2,
+        "scale" : 0.2
+    }
+}
