@@ -8,25 +8,32 @@ from src.utils import loss
 import numpy.random as npr
 from jax import grad, jit
 
-import time
+import wandb
 
 
 # train function
-def train(model, batches, num_batches, scale, layer_sizes, num_epochs, step_size):
-    params = init_params(scale, layer_sizes)
+def train(model, train_batches, num_train_batches, val_batches, config, args):
 
-    for epoch in range(num_epochs):
-        start_time = time.time()
-        for _ in range(num_batches):
-            params = update(model, params, next(batches), step_size)
-        epoch_time = time.time() - start_time
+    wandb.init(entity='syrkis', project="kaggle", name=args.comp, reinit=False)
+    params = init_params(config['scale'], config['layer_sizes'])
+    for epoch in range(config['num_epochs']):
+        for _ in range(num_train_batches):
+
+            val_batch = next(val_batches)
+            train_batch = next(train_batches)
+
+            val_loss = loss(params, model, val_batch)
+            train_loss = loss(params, model, train_batch)
+
+            params = update(params, model, train_batch, config['step_size'])
+            wandb.log({"Train loss": train_loss, "Val loss": val_loss})
 
     return params
 
 
 # update parameters with back propagation
-def update(model, params, batch, step_size):
-    grads = grad(loss)(params, batch)
+def update(params, model, batch, step_size):
+    grads = grad(loss)(params, model, batch)
     return [(w - step_size * dw, b - step_size * db)
             for (w, b), (dw, db) in zip(params, grads)]
 

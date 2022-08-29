@@ -7,8 +7,7 @@ train:
 	python main.py --comp=$(comp)
 
 submit:
-	python main.py --comp=$(comp)
-	kaggle competitions submit -c $(comp) -f data/submission.csv
+	kaggle competitions submit -c $(comp) -f data/submission.csv -m "my kaggle submission"
 	rm data/submission.csv
 
 

@@ -4,28 +4,21 @@
 
 # imports
 from src import *
-from models import *
+from comps import *
 import numpy as np
 
 
 # main
 def main():
     args = get_args()
+    config = get_config(args)
 
-    scale = 0.1
-    batch_size = 128
-    layer_sizes = []
-    num_epochs = 10
-    step_size = 1e-3
+    model, (train_inputs, train_targets, test_inputs) = get_comp(args.comp)
+    train_val_idxs = train_validation_split(len(train_targets))
 
-    train_inputs, train_targets, train_n, test_inputs = get_data(args.comp)
-    model = get_model(args.comp)
-    batches = data_stream(train_inputs, train_targets, batch_size, k=10)
-    params = train(model, batches, train_n//batch_size, scale, layer_sizes, num_epochs, step_size)
-    """
-    submission = predict(params, test_inputs)
-    np.savetxt("data/submission.csv", submission, delimiter=",")
-    """
+    params = k_fold(model, train_inputs, train_targets, train_val_idxs, config, args)
+    test_pred = make_submission_df(np.argmax(predict(params, test_inputs.to_numpy()), axis=1).astype(int), test_inputs.index)
+    test_pred.to_csv("data/submission.csv", index=False)
 
 
 if __name__ == '__main__':
